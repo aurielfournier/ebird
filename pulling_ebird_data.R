@@ -1,12 +1,12 @@
 
-setwd('/Users/AurielFournier/Dropbox/R/ebird')
+
 ################################################
-ababase<-read.csv('/Users/AurielFournier/Dropbox/R/ebird/ababase.csv',header=T) ### this the base aba file created to filter/group birds
+ababase<-read.csv('~/GitHub/ebird/ababase.csv',header=T) ### this the base aba file created to filter/group birds
 
 filter<-c(' sp.','hybrid','Domestic','/')   ###what things should be filtered by (exact cases)
 
 url1<-'http://ebird.org/ebird/BarChart?cmd=getChart&displayType=download&getLocations=states&states=US-AL&bYear=1900&eYear=2014&bMonth=1&eMonth=12&reportType=location&parentState=US-AL'
-worklist<-c(2014) ###this is a list of years you want to download, if you do any range of time make sure its in the form 'yearstart-yearend', the '-' is important
+worklist<-c(2013) ###this is a list of years you want to download, if you do any range of time make sure its in the form 'yearstart-yearend', the '-' is important
 states<-c('MO') ###a vector of the states you want to download ebird data from and aggregate over, maxed at 3
 qs2<-length(states)
 ###dont need this for now
@@ -69,5 +69,5 @@ for(i in worklist){
   colnames(frame3)[1]<-'species'
   frame3<-frame3[,c(50,1,53,51,52,54,55,56,57,2:49)]
   ##############################################
-  write.csv(frame3,paste0('Ebird_',i,'.csv'),row.names=F)
+  write.csv(frame3,paste0('~/GitHub/data/Ebird_',i,'.csv'),row.names=F)
 }
