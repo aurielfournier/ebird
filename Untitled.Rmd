@@ -1,0 +1,130 @@
+---
+title: "ebird"
+author: "Auriel Fournier"
+date: "September 7, 2014"
+output: pdf_document
+---
+```{r}
+
+
+library(reshape2)
+library(xtable)
+setwd("~/Dropbox/Field 2014")
+
+dat <- read.csv("survey_all.csv",header=T)
+
+dat$week[dat$jdate==221|dat$jdate==222|dat$jdate==223|dat$jdate==224|dat$jdate==225|dat$jdate==226|dat$jdate==227|dat$jdate==228] <- "Aug2"
+dat$week[dat$jdate==229|dat$jdate==230|dat$jdate==231|dat$jdate==232|dat$jdate==233|dat$jdate==234|dat$jdate==235|dat$jdate==236] <- "Aug3"
+dat$week[dat$jdate==237|dat$jdate==238|dat$jdate==239|dat$jdate==240|dat$jdate==241|dat$jdate==242|dat$jdate==243] <- "Aug4"
+
+dat$week[dat$jdate==244|dat$jdate==245|dat$jdate==246|dat$jdate==247|dat$jdate==248|dat$jdate==249|dat$jdate==250|dat$jdate==251] <- "Sept1"
+dat$week[dat$jdate==252|dat$jdate==253|dat$jdate==254|dat$jdate==255|dat$jdate==256|dat$jdate==257|dat$jdate==258|dat$jdate==259] <- "Sept2"
+dat$week[dat$jdate==260|dat$jdate==261|dat$jdate==262|dat$jdate==263|dat$jdate==264|dat$jdate==265|dat$jdate==266|dat$jdate==267] <- "Sept3"
+dat$week[dat$jdate==268|dat$jdate==269|dat$jdate==270|dat$jdate==271|dat$jdate==272|dat$jdate==273] <- "Sept4"
+
+dat$week[dat$jdate==274|dat$jdate==275|dat$jdate==276|dat$jdate==277|dat$jdate==278|dat$jdate==279|dat$jdate==280|dat$jdate==281] <- "Oct1"
+dat$week[dat$jdate==282|dat$jdate==283|dat$jdate==284|dat$jdate==285|dat$jdate==286|dat$jdate==287|dat$jdate==288|dat$jdate==289] <- "Oct2"
+dat$week[dat$jdate==290|dat$jdate==291|dat$jdate==292|dat$jdate==293|dat$jdate==294|dat$jdate==295|dat$jdate==296|dat$jdate==297] <- "Oct3"
+dat$week[dat$jdate==298|dat$jdate==299|dat$jdate==300|dat$jdate==301|dat$jdate==302|dat$jdate==303|dat$jdate==304|dat$jdate==305] <- "Oct4"
+
+dat$shr <- dat$sora/dat$time
+
+dat$week <- factor(dat$week, levels=c("Aug1","Aug2","Aug3","Aug4","Sept1","Sept2","Sept3","Sept4","Oct1","Oct2","Oct3","Oct4"))
+
+dat <- dat[,c("week","year","shr")]
+
+s12 <- dat[dat$year==2012,]
+s13 <- dat[dat$year==2013,]
+s14 <- dat[dat$year==2014,]
+
+s12 <- s12[,c("week","shr")]
+s13 <- s13[,c("week","shr")]
+s14 <- s14[,c("week","shr")]
+
+ms12 <- melt(s12)
+ms13 <- melt(s13)
+ms14 <- melt(s14)
+
+cs12 <- na.omit(cast(week~variable, data=ms12, mean))
+cs13 <- na.omit(cast(week~variable, data=ms13, mean))
+cs14 <- na.omit(cast(week~variable, data=ms14, mean))
+
+mspline12 = smooth.spline(cs12$week, cs12$shr, spar=.6)
+dfmspline12 = data.frame(x=cs12$week, y=mspline12$y)
+
+mspline13 = smooth.spline(cs13$week, cs13$shr, spar=.6)
+dfmspline13 = data.frame(x=cs13$week, y=mspline13$y)
+
+mspline14 = smooth.spline(cs14$week, cs14$shr, spar=.6)
+dfmspline14 = data.frame(x=cs14$week, y=mspline14$y)
+
+
+
+setwd("~/Dropbox/R/ebird")
+
+worklist<-c(2003:2014) ###this is a list of years you want to download, if you do any range of time make sure its in the form 'yearstart-yearend', the '-' is important
+states<-c('MO')
+
+for(p in states){
+for(i in worklist){
+  #i<-2013 ##for testing purposes only
+  oname <- paste0('Ebird_',states[1],'_',i)
+  oname<-read.delim(oname,skip=12,header=T)
+             }}
+
+txt_files = list.files(pattern = 'Ebird_*')
+
+data = lapply(txt_files, function(x) read.delim(x,skip=12,header=T))
+
+Ebird_MO_2003 <- read.delim('Ebird_MO_2003',skip=12,header=T)
+Ebird_MO_2004 <- read.delim('Ebird_MO_2004',skip=12,header=T)
+Ebird_MO_2005 <- read.delim('Ebird_MO_2005',skip=12,header=T)
+Ebird_MO_2006 <- read.delim('Ebird_MO_2006',skip=12,header=T)
+Ebird_MO_2007 <- read.delim('Ebird_MO_2007',skip=12,header=T)
+Ebird_MO_2008 <- read.delim('Ebird_MO_2008',skip=12,header=T)
+Ebird_MO_2009 <- read.delim('Ebird_MO_2009',skip=12,header=T)
+Ebird_MO_2010 <- read.delim('Ebird_MO_2010',skip=12,header=T)
+Ebird_MO_2011 <- read.delim('Ebird_MO_2011',skip=12,header=T)
+
+
+sora <- data.frame(matrix(ncol=50,nrow=10))
+
+sora[1,] <- Ebird_MO_2003[Ebird_MO_2003$X=="Sora",]
+sora[2,] <- Ebird_MO_2004[Ebird_MO_2004$X=="Sora",]
+sora[3,] <- Ebird_MO_2005[Ebird_MO_2005$X=="Sora",]
+sora[4,] <- Ebird_MO_2006[Ebird_MO_2006$X=="Sora",]
+sora[5,] <- Ebird_MO_2007[Ebird_MO_2007$X=="Sora",]
+sora[6,] <- Ebird_MO_2008[Ebird_MO_2008$X=="Sora",]
+sora[7,] <- Ebird_MO_2009[Ebird_MO_2009$X=="Sora",]
+sora[8,] <- Ebird_MO_2010[Ebird_MO_2010$X=="Sora",]
+sora[9,] <- Ebird_MO_2011[Ebird_MO_2011$X=="Sora",]
+#sora[10,] <- Ebird_MO_2012[Ebird_MO_2014$X=="Sora",]
+#sora[11,] <- Ebird_MO_2013[Ebird_MO_2013$X=="Sora",]
+colnames(sora) <- colnames(Ebird_MO_2003)
+sora <- sora[c(1,30:49)]
+sora[10,] <- apply(sora[1:9,], 2, mean)
+
+
+colnames(sora) <- c("year","Aug1","Aug2","Aug3","Aug4","Sept1","Sept2","Sept3","Sept4","Oct1","Oct2","Oct3","Oct4","Nov1","Nov2","Nov3","Nov4","Dec1","Dec2","Dec3","Dec4")
+sora$year <- c(2003,2004,2005,2006,2007,2008,2009,2010,2011,"total")
+
+s <- sora[10,]
+ms <- melt(s)
+mspline = smooth.spline(ms$variable, ms$value, spar=.6)
+dfmspline = data.frame(x=ms$variable, y=mspline$y)
+
+
+ggplot()+ 
+  #geom_bar(data=ms, aes(x=variable, y=value), stat="identity", fill="gray",colour="black",size=.5)+
+  geom_line(data=dfmspline, aes(x=x,y=y, group=1), colour="black")+
+    geom_line(data=dfmspline12, aes(x=x,y=y, group=1), colour="#e34a33")+
+    geom_line(data=dfmspline13, aes(x=x,y=y, group=1), colour="#0868ac")+
+    geom_line(data=dfmspline14, aes(x=x,y=y, group=1), colour="#339900")+
+  ylim(0,18)
+
+
+
+
+
+
+```
