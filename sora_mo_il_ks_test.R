@@ -1,6 +1,6 @@
-dat <- read.csv("ebd_sora_prv_relAug-2014.csv", header=T)
+dat <- read.csv("ebd_sora_relNov-2014.csv", header=T)
 
-dat <- dat[,c("OBSERVATION.COUNT","STATE_PROVINCE","OBSERVATION.DATE")]
+ddat <- dat[,c("OBSERVATION.COUNT","STATE_PROVINCE","OBSERVATION.DATE")]
 
 dat$OBSERVATION.DATE <- as.character(dat$OBSERVATION.DATE)
 
